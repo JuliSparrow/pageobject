@@ -9,6 +9,7 @@ import ru.netology.web.page.LoginPageV3;
 import static com.codeborne.selenide.Selenide.open;
 
 class MoneyTransferTest {
+
     @Test
     void shouldTransferMoneyBetweenOwnCardsV1() {
       open("http://localhost:9999");
@@ -17,7 +18,12 @@ class MoneyTransferTest {
       var authInfo = DataHelper.getAuthInfo();
       var verificationPage = loginPage.validLogin(authInfo);
       var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-      verificationPage.validVerify(verificationCode);
+      var dashboardPage = verificationPage.validVerify(verificationCode);
+      dashboardPage.selectFirst().chargeFromSecond(100)
+              .selectSecond().chargeFromFirst(100)
+              .selectSecond().cancel()
+              .selectFirst().chargeFromFirst(100)
+              .selectSecond().chargeFromSecond(100);
     }
 
   @Test
@@ -28,7 +34,12 @@ class MoneyTransferTest {
     var authInfo = DataHelper.getAuthInfo();
     var verificationPage = loginPage.validLogin(authInfo);
     var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-    verificationPage.validVerify(verificationCode);
+    var dashboardPage = verificationPage.validVerify(verificationCode);
+    dashboardPage.selectFirst().chargeFromSecond(100)
+            .selectSecond().chargeFromFirst(100)
+            .selectSecond().cancel()
+            .selectFirst().chargeFromFirst(100)
+            .selectSecond().chargeFromSecond(100);
   }
 
   @Test

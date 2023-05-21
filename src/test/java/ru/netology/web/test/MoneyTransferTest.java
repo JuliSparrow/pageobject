@@ -49,6 +49,12 @@ class MoneyTransferTest {
     var verificationPage = loginPage.validLogin(authInfo);
     var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
     verificationPage.validVerify(verificationCode);
+    var dashboardPage = verificationPage.validVerify(verificationCode);
+    dashboardPage.selectFirst().chargeFromSecond(100)
+            .selectSecond().chargeFromFirst(100)
+            .selectSecond().cancel()
+            .selectFirst().chargeFromFirst(100)
+            .selectSecond().chargeFromSecond(100);
   }
 }
 

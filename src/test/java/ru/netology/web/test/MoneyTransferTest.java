@@ -1,5 +1,6 @@
 package ru.netology.web.test;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.netology.web.data.DataHelper;
 import ru.netology.web.page.DashboardPage;
@@ -26,54 +27,100 @@ class MoneyTransferTest {
   @Test
   void shouldTransferMoneyFromSecondToFirst() {
     var dashboardPage = prepare();
+    int amount = 200;
+    int firstExpectedBalance = dashboardPage.getFirstBalance() + amount;
+    int secondExpectedBalance = dashboardPage.getSecondBalance() - amount;
+
     var chargePage = dashboardPage.selectFirst();
-    dashboardPage = chargePage.chargeFromSecond(100);
-    dashboardPage.checkBalances();
+    dashboardPage = chargePage.charge(DataHelper.getSecondCard(), amount);
+
+    int firstActualBalance = dashboardPage.getFirstBalance();
+    int secondActualBalance = dashboardPage.getSecondBalance();
+    Assertions.assertEquals(firstExpectedBalance, firstActualBalance);
+    Assertions.assertEquals(secondExpectedBalance, secondActualBalance);
   }
 
   @Test
   void shouldTransferMoneyFromFirstToSecond() {
     var dashboardPage = prepare();
+    int amount = 200;
+    int firstExpectedBalance = dashboardPage.getFirstBalance() - amount;
+    int secondExpectedBalance = dashboardPage.getSecondBalance() + amount;
+
     var chargePage = dashboardPage.selectSecond();
-    dashboardPage = chargePage.chargeFromFirst(200);
-    dashboardPage.checkBalances();
+    dashboardPage = chargePage.charge(DataHelper.getSecondCard(), amount);
+
+    int firstActualBalance = dashboardPage.getFirstBalance();
+    int secondActualBalance = dashboardPage.getSecondBalance();
+    Assertions.assertEquals(firstExpectedBalance, firstActualBalance);
+    Assertions.assertEquals(secondExpectedBalance, secondActualBalance);
   }
 
   @Test
   void shouldNoChangesWhenTransferMoneyFromFirstToFirst() {
     var dashboardPage = prepare();
+    int amount = 300;
+    int firstExpectedBalance = dashboardPage.getFirstBalance();
+    int secondExpectedBalance = dashboardPage.getSecondBalance();
+
     var chargePage = dashboardPage.selectFirst();
-    dashboardPage = chargePage.chargeFromFirst(300);
-    dashboardPage.checkNoChanges();
+    dashboardPage = chargePage.charge(DataHelper.getFirstCard(), amount);
+
+    int firstActualBalance = dashboardPage.getFirstBalance();
+    int secondActualBalance = dashboardPage.getSecondBalance();
+    Assertions.assertEquals(firstExpectedBalance, firstActualBalance);
+    Assertions.assertEquals(secondExpectedBalance, secondActualBalance);
   }
 
   @Test
   void shouldNoChangesWhenTransferMoneyFromSecondToSecond() {
     var dashboardPage = prepare();
+    int amount = 400;
+    int firstExpectedBalance = dashboardPage.getFirstBalance();
+    int secondExpectedBalance = dashboardPage.getSecondBalance();
+
     var chargePage = dashboardPage.selectSecond();
-    dashboardPage = chargePage.chargeFromSecond(400);
-    dashboardPage.checkNoChanges();
+    dashboardPage = chargePage.charge(DataHelper.getSecondCard(), amount);
+
+    int firstActualBalance = dashboardPage.getFirstBalance();
+    int secondActualBalance = dashboardPage.getSecondBalance();
+    Assertions.assertEquals(firstExpectedBalance, firstActualBalance);
+    Assertions.assertEquals(secondExpectedBalance, secondActualBalance);
   }
 
   @Test
   void shouldNoChangesWhenCancel() {
     var dashboardPage = prepare();
+    int amount = 400;
+    int firstExpectedBalance = dashboardPage.getFirstBalance();
+    int secondExpectedBalance = dashboardPage.getSecondBalance();
+
     var chargePage = dashboardPage.selectFirst();
-    dashboardPage = chargePage.cancel();
-    dashboardPage.checkNoChanges();
+    dashboardPage = chargePage.fillForm(DataHelper.getFirstCard(), amount).cancel();
+
+    int firstActualBalance = dashboardPage.getFirstBalance();
+    int secondActualBalance = dashboardPage.getSecondBalance();
+    Assertions.assertEquals(firstExpectedBalance, firstActualBalance);
+    Assertions.assertEquals(secondExpectedBalance, secondActualBalance);
   }
 
   @Test
   void shouldChargeFirstThenChargeSecond() {
     var dashboardPage = prepare();
+    int amount = 100;
+    int firstExpectedBalance = dashboardPage.getFirstBalance() + amount;
+    int secondExpectedBalance = dashboardPage.getSecondBalance() - amount;
+
     var chargePage = dashboardPage.selectFirst();
-    dashboardPage = chargePage.chargeFromSecond(100);
-    dashboardPage.checkBalances();
+    dashboardPage = chargePage.charge(DataHelper.getSecondCard(), amount);
 
     chargePage = dashboardPage.selectSecond();
-    dashboardPage = chargePage.chargeFromFirst(100);
-    dashboardPage.checkBalances();
+    dashboardPage = chargePage.charge(DataHelper.getFirstCard(), amount);
 
+    int firstActualBalance = dashboardPage.getFirstBalance();
+    int secondActualBalance = dashboardPage.getSecondBalance();
+    Assertions.assertEquals(firstExpectedBalance, firstActualBalance);
+    Assertions.assertEquals(secondExpectedBalance, secondActualBalance);
   }
 
 }

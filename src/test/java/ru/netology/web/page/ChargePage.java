@@ -2,8 +2,6 @@ package ru.netology.web.page;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.Keys;
-import ru.netology.web.data.CacheStorage;
-import ru.netology.web.data.DataHelper;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -23,22 +21,19 @@ public class ChargePage {
     pageDescription.shouldBe(visible).shouldHave(text(chargePageText));
   }
 
-  public DashboardPage chargeFromFirst(int amount) {
-    return charge(DataHelper.getFirstCard(), amount);
-  }
-
-  public DashboardPage chargeFromSecond(int amount) {
-    return charge(DataHelper.getSecondCard(), amount);
-  }
-
-  private DashboardPage charge(String fromCard, int amount) {
-    CacheStorage.setAmount(amount);
-    CacheStorage.setFromCardNumber(fromCard);
+  public DashboardPage charge(String fromCard, int amount) {
 //    clearForm();
     amountInput.setValue(String.valueOf(amount));
     fromInput.setValue(fromCard);
     transferButton.click();
     return new DashboardPage();
+  }
+
+  public ChargePage fillForm(String fromCard, int amount) {
+//    clearForm();
+    amountInput.setValue(String.valueOf(amount));
+    fromInput.setValue(fromCard);
+    return this;
   }
 
   public DashboardPage cancel() {

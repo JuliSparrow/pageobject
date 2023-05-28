@@ -48,7 +48,7 @@ class MoneyTransferTest {
     int secondExpectedBalance = dashboardPage.getSecondBalance() + amount;
 
     var chargePage = dashboardPage.selectSecond();
-    dashboardPage = chargePage.charge(DataHelper.getSecondCard(), amount);
+    dashboardPage = chargePage.charge(DataHelper.getFirstCard(), amount);
 
     int firstActualBalance = dashboardPage.getFirstBalance();
     int secondActualBalance = dashboardPage.getSecondBalance();
@@ -114,11 +114,19 @@ class MoneyTransferTest {
     var chargePage = dashboardPage.selectFirst();
     dashboardPage = chargePage.charge(DataHelper.getSecondCard(), amount);
 
+    int firstActualBalance = dashboardPage.getFirstBalance();
+    int secondActualBalance = dashboardPage.getSecondBalance();
+    Assertions.assertEquals(firstExpectedBalance, firstActualBalance);
+    Assertions.assertEquals(secondExpectedBalance, secondActualBalance);
+
+    firstExpectedBalance = firstActualBalance - amount;
+    secondExpectedBalance = secondActualBalance + amount;
+
     chargePage = dashboardPage.selectSecond();
     dashboardPage = chargePage.charge(DataHelper.getFirstCard(), amount);
 
-    int firstActualBalance = dashboardPage.getFirstBalance();
-    int secondActualBalance = dashboardPage.getSecondBalance();
+    firstActualBalance = dashboardPage.getFirstBalance();
+    secondActualBalance = dashboardPage.getSecondBalance();
     Assertions.assertEquals(firstExpectedBalance, firstActualBalance);
     Assertions.assertEquals(secondExpectedBalance, secondActualBalance);
   }
